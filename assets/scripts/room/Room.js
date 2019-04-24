@@ -3,7 +3,7 @@ let gameMessage = require("../app/GameMessage");
 let user = require("../app/UserInfo");
 let mvs = require("../MatchvsLib/Matchvs");
 let msg = require("../MatchvsLib/MatvhvsMessage");
-
+let engine = require("../MatchvsLib/MatchvsEngine");
 cc.Class({
   extends: cc.Component,
 
@@ -19,7 +19,8 @@ cc.Class({
     seats: {
       default: [],
       type: cc.Node
-    }
+    },
+    roomName: cc.Label,
   },
 
   // LIFE-CYCLE CALLBACKS:
@@ -31,6 +32,7 @@ cc.Class({
     cc.systemEvent.on(msg.MATCHVS_JOIN_ROOM_RSP, this.onMatchvsEvent, this);
     cc.systemEvent.on(msg.MATCHVS_JOIN_ROOM_NOTIFY, this.onMatchvsEvent, this);
     cc.systemEvent.on(msg.MATCHVS_ERROE_MSG, this.onMatchvsEvent, this);
+    cc.systemEvent.on(msg.MATCHVS_ROOM_DETAIL, this.onMatchvsEvent, this);
 
     //设置回调
     //客户端之间的消息通讯
@@ -49,6 +51,10 @@ cc.Class({
         break;
       case msg.MATCHVS_JOIN_ROOM_NOTIFY:
         console.log('有人加入了房间->>>');
+        break;
+      case msg.MATCHVS_JOIN_ROOM_RSP:
+        console.log('获取房间详情->>>>>>>>>>');
+        console.log('event.data = ', event.data);
         break;
       case msg.MATCHVS_ERROE_MSG:
         console.log("[Err]errCode:" + eventData.errorCode + " errMsg:" + eventData.errorMsg);
@@ -81,6 +87,16 @@ cc.Class({
         }
         // console.log('更新玩家成功----->>>', this.players, this.player);
         break;
+      case gameMessage.GAME_START_EVENT:
+        console.log('收到游戏开始的消息，开始抓牌---->>>');
+        engine.prototype.sendEventEx(1, JSON.stringify({
+          type: gameMessage.GET_PLAYER_CARDS_EVENT
+        }));
+        break;
+      case gameMessage.GET_PLAYER_CARDS_RSP_EVENT:
+        console.log('服务器发牌啦---->>>', eventData.data);
+
+        break;
     }
   },
 
@@ -102,9 +118,6 @@ cc.Class({
   },
 
   start() {
-
-    // let nameNode = this.bottomSeat.getChildByName("name");
-    // nameNode.getComponent(cc.Label).string = user.name;
 
   },
 

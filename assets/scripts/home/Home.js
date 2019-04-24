@@ -18,7 +18,6 @@ cc.Class({
         //在应用开始时手动绑定一下所有的回调事件
 
         cc.systemEvent.on(msg.MATCHVS_JOIN_ROOM_RSP, this.onMatchvsEvent, this);
-        // this.node.on(msg.MATCHVS_JOIN_ROOM_NOTIFY,this.joinRoomNotify,this);
         cc.systemEvent.on(msg.MATCHVS_ERROE_MSG, this.onMatchvsEvent, this);
     },
 

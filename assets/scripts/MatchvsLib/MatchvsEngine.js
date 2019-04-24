@@ -222,6 +222,7 @@ MatchvsEngine.prototype.sendEvent = function (msg) {
  */
 MatchvsEngine.prototype.sendEventEx = function (type, msg) {
     let data = mvs.engine.sendEventEx(type, msg, 1, []);
+    console.log("发送信息 sendEventEx result" + data.result);
     return data.result;
 };
 /**
